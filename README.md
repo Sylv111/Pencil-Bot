@@ -1,5 +1,6 @@
 # JeanZayBot
 Currently, it:
+
 Add a role when a member join the server;
 Respond "feur" when someone say "quoi"
 
