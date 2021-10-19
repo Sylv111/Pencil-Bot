@@ -5,6 +5,7 @@ from datetime import datetime
 from discord.ext import commands, tasks
 from discord.utils import get
 import pytz
+from random import randint
 
 #List of all things that were modified to be published online:
 #ROLEID
@@ -20,7 +21,7 @@ client = commands.Bot(command_prefix='!', intents=intents)
 @client.event #OnReady
 async def on_ready():
     print('Bot is ready!')
-    await client.change_presence(activity=discord.Game(name="🐢 V1.1 | https://github.com/Askehraz/JeanZayBot"))
+    await client.change_presence(activity=discord.Game(name="🐢 V1.2 | https://github.com/Askehraz/JeanZayBot"))
 
 @client.event #Autorole
 async def on_member_join(member):
@@ -34,7 +35,10 @@ async def on_message(message):
     stripped_message = message.content.lower().strip(" .:?!*\)")
 
     if stripped_message.endswith("quoi"):
-        await message.channel.send("feur")
+        if randint(1,10) == 1:
+            await message.channel.send("https://user-images.githubusercontent.com/56942820/137981144-fe0c2d96-400c-45eb-9033-b96d34ed3a20.mp4")
+        else:
+            await message.channel.send("feur")
 
 
 #Code for the homework embed
@@ -43,7 +47,7 @@ async def on_message(message):
 async def start(ctx):
     DevoirFetch.start(ctx)
 
-@tasks.loop(hours=3.0) #Homework fetched than sent in an embed every 3 hours
+@tasks.loop(hours=6.0) #Homework fetched than sent in an embed every 3 hours
 async def DevoirFetch(ctx):
     with Session() as s:
         LoginSite = s.get("https://cas.ent.auvergnerhonealpes.fr/login?selection=CLERMONT-ATS_parent_eleve&service=https%3A%2F%2Fjean-zay-thiers.ent.auvergnerhonealpes.fr%2Fsg.do%3FPROC%3DIDENTIFICATION_FRONT&submit=Valider")
