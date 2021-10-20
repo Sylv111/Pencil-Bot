@@ -6,13 +6,13 @@ from discord.ext import commands, tasks
 from discord.utils import get
 import pytz
 from random import randint
+import itertools
 
 #List of all things that were modified to be published online:
 #ROLEID
 #USERNAME
 #PASSWORD
 #BOTKEY
-
 
 intents = discord.Intents.default()
 intents.members = True
@@ -21,7 +21,7 @@ client = commands.Bot(command_prefix='!', intents=intents)
 @client.event #OnReady
 async def on_ready():
     print('Bot is ready!')
-    await client.change_presence(activity=discord.Game(name="🐢 V1.2 | https://github.com/Askehraz/JeanZayBot"))
+    await client.change_presence(activity=discord.Game(name="🐢 V1.3 | https://github.com/Askehraz/JeanZayBot"))
 
 @client.event #Autorole
 async def on_member_join(member):
@@ -35,8 +35,11 @@ async def on_message(message):
     stripped_message = message.content.lower().strip(" .:?!*\)")
 
     if stripped_message.endswith("quoi"):
-        if randint(1,10) == 1:
-            await message.channel.send("https://user-images.githubusercontent.com/56942820/137981144-fe0c2d96-400c-45eb-9033-b96d34ed3a20.mp4")
+        RandomVideoFeur = randint(1,10)
+        if RandomVideoFeur == 1:
+            await message.channel.send("http://askehraz.fr/upload/TheoFeur.mp4")
+        elif RandomVideoFeur == 2:
+            await message.channel.send("http://askehraz.fr/upload/MinecraftFeur.mp4")
         else:
             await message.channel.send("feur")
 
@@ -59,10 +62,21 @@ async def DevoirFetch(ctx):
 
         SoupOutput = bs(PageOutput, 'lxml')
         DataOutput = SoupOutput.find_all('div', class_ = 'panel panel--full panel--no-margin')
+        DataOutputDate = SoupOutput.find_all('p', class_ = 'p-like slug slug--xs text--slate')
+
+        DataOutputPrint = list(itertools.chain.from_iterable(zip(DataOutputDate,DataOutput)))
+
         FormattedDataOutput = ""
-        for element in DataOutput:
+        NbOfElement = 0
+        for element in DataOutputPrint:
             print(element.text)
-            FormattedDataOutput = FormattedDataOutput + "\n" + "\n" + "-" + (element.text)
+            if (NbOfElement % 2) == 0:
+                FormattedDataOutput = FormattedDataOutput + "\n" + "\n" + (element.text.capitalize())
+                NbOfElement = NbOfElement + 1
+            else:
+                FormattedDataOutput = FormattedDataOutput + "\n" + "-" + (element.text)
+                NbOfElement = NbOfElement + 1
+
     print("Data fetched")
     TimezoneFrance = pytz.timezone('Europe/Paris')
     DatetimeFrance = datetime.now(TimezoneFrance)
